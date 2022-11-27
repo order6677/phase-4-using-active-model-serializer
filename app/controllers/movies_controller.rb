@@ -7,9 +7,20 @@ class MoviesController < ApplicationController
   end
 
   def show
-    movie = Movie.find(params[:id])
-    render json: movie
-  end
+    post = Post.find(params[:id])
+    render json: post.to_json(only: [:title, :description, :id], include: [author: { only: [:name]}])
+ end
+
+ def summaries
+  movies = Movie.all
+  render json: movies, each_serializer: MovieSummarySerializer
+end
+
+def summary
+  movie = Movie.find(params[:id])
+  render json: movie, serializer: MovieSummarySerializer
+end
+  
 
   private
 
